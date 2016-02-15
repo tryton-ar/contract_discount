@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<data>
+    <xpath
+        expr="/form/separator[@id='recurrence']"
+        position="before">
+          <separator id="nube" string="Nube services" colspan="4"/>
+          <label name="client_number"/>
+          <field name="client_number"/>
+          <label name="paymode"/>
+          <field name="paymode"/>
+          <label name="mail"/>
+          <field name="mail"/>
+          <label name="contract_address"/>
+          <field name="contract_address"/>
+    </xpath>
+</data>

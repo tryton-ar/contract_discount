@@ -1,0 +1,12 @@
+<data>
+    <xpath expr="/form/label[@name='unit_price']"
+        position="before">
+        <label name="gross_unit_price"/>
+        <field name="gross_unit_price"/>
+        <group id="discount" colspan="2" col="3">
+            <label name="discount"/>
+            <field name="discount" factor="100" xexpand="0" xfill="0"/>
+            <label name="discount" string="%" xalign="0.0" xexpand="1" xfill="1"/>
+        </group>
+    </xpath>
+</data>

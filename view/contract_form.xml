@@ -3,14 +3,13 @@
     <xpath
         expr="/form/separator[@id='recurrence']"
         position="before">
-          <separator id="nube" string="Nube services" colspan="4"/>
-          <label name="client_number"/>
-          <field name="client_number"/>
-          <label name="paymode"/>
-          <field name="paymode"/>
-          <label name="mail"/>
-          <field name="mail"/>
-          <label name="contract_address"/>
-          <field name="contract_address"/>
+        <separator id="discount" string="Discount" colspan="4"/>
+        <group id="contract_discount" colspan="2" col="3" xexpand="0">
+            <label name="contract_discount" xalign="1.0" xexpand="1"/>
+            <group id="discount_percent" colspan="1" col="2" xexpand="0">
+                <field name="contract_discount" factor="100" xalign="1.0" xexpand="0"/>
+                <label name="contract_discount" string="%" xalign="0.0" xexpand="1" xfill="1"/>
+            </group>
+        </group>
     </xpath>
 </data>

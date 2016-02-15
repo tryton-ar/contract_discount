@@ -1,0 +1,8 @@
+<data>
+    <xpath expr="/tree/field[@name='unit_price']" position="before">
+        <field name="gross_unit_price"/>
+        <field name="discount" factor="100">
+            <suffix string="%"/>
+        </field>
+    </xpath>
+</data>

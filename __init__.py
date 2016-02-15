@@ -10,4 +10,4 @@ def register():
         Contract,
         ContractLine,
         ContractConsumption,
-        module='contract_rcc', type_='model')
+        module='contract_discount', type_='model')

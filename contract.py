@@ -108,7 +108,7 @@ class ContractLine:
         contract_discount = Transaction().context.get('contract_discount')
 
         if contract_discount is None:
-            if self.contract and hasattr(self.contract, 'contract_discount'):
+            if hasattr(self, 'contract') and hasattr(self.contract, 'contract_discount'):
                 contract_discount = self.contract.contract_discount or Decimal(0)
             else:
                 contract_discount = Decimal(0)

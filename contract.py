@@ -201,16 +201,36 @@ class ContractConsumption:
 
     def get_invoice_line(self):
         line = super(ContractConsumption, self).get_invoice_line()
-        line.gross_unit_price = self.contract_line.gross_unit_price
-        discount = Decimal(0)
-        if self.contract_line.discount and self.contract and self.contract.contract_discount:
-            discount = (Decimal('1.0')
-                - (Decimal('1.0') - self.contract_line.discount)
-                * (Decimal('1.0') - self.contract.contract_discount))
-            pass
-        elif self.contract and self.contract.contract_discount:
-            discount = self.contract.contract_discount
-        elif self.contract_line.discount:
-            discount = self.contract_line.discount
-        line.discount = discount
-        return line
+        if line:
+            line.gross_unit_price = self.contract_line.gross_unit_price
+            discount = Decimal(0)
+            if self.contract_line.discount and self.contract and self.contract.contract_discount:
+                discount = (Decimal('1.0')
+                    - (Decimal('1.0') - self.contract_line.discount)
+                    * (Decimal('1.0') - self.contract.contract_discount))
+                discount = self.verify_contract_period(discount)
+                pass
+            elif self.contract and self.contract.contract_discount:
+                discount = self.contract.contract_discount
+            elif self.contract_line.discount:
+                discount = self.contract_line.discount
+                discount = self.verify_contract_period(discount)
+
+            line.discount = discount
+            return line
+
+    def verify_contract_period(self, discount):
+        import datetime
+        if self.contract_line.contract_start_date:
+            start_period_date = self.contract.get_start_period_date(self.contract_line.contract_start_date)
+            if start_period_date < datetime.date.today():
+                if self.contract_line.contract_end_date:
+                    if self.contract_line.contract_end_date > datetime.date.today():
+                        return discount
+                    else:
+                        return Decimal(0)  # Do not apply discount
+                else:
+                    return discount
+            else:
+                return Decimal(0)  # Do not apply discount
+        return discount

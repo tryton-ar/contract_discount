@@ -1,11 +1,10 @@
 <?xml version="1.0"?>
 <data>
     <xpath
-        expr="/form/separator[@id='recurrence']"
-        position="before">
-        <separator id="discount" string="Discount" colspan="4"/>
+        expr="/form/field[@name='end_date']"
+        position="after">
         <group id="contract_discount" colspan="2" col="3" xexpand="0">
-            <label name="contract_discount" xalign="1.0" xexpand="1"/>
+            <label name="contract_discount" xalign="1.0" xexpand="0"/>
             <group id="discount_percent" colspan="1" col="2" xexpand="0">
                 <field name="contract_discount" factor="100" xalign="1.0" xexpand="0"/>
                 <label name="contract_discount" string="%" xalign="0.0" xexpand="1" xfill="1"/>

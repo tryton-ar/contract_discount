@@ -5,7 +5,7 @@
 from trytond.model import fields
 from trytond.transaction import Transaction
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval
+from trytond.pyson import Eval, If, Bool
 from trytond.modules.product import price_digits
 from trytond.config import config as config_
 from decimal import Decimal
@@ -78,6 +78,23 @@ class ContractLine:
         digits=(16, price_digits[1] + DISCOUNT_DIGITS), readonly=True)
     discount = fields.Numeric('Discount', digits=(16, DISCOUNT_DIGITS),
         depends=['type'])
+    contract_start_date = fields.Date('Contract Start Date',
+        states={
+            'required': Bool(Eval('discount')),
+            },
+        domain=[
+            If(Bool(Eval('contract_end_date')),
+                ('contract_start_date', '<=', Eval('contract_end_date', None)),
+                ()),
+            ],
+        depends=['contract_end_date', 'discount'])
+    contract_end_date = fields.Date('Contract End Date',
+        domain=[
+            If(Bool(Eval('contract_end_date')),
+                ('contract_end_date', '>=', Eval('contract_start_date', None)),
+                ()),
+            ],
+        depends=['contract_start_date'])
 
     @classmethod
     def __setup__(cls):

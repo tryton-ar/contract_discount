@@ -1,20 +1,34 @@
-# contract_rcc
-The Tryton *contract_rcc* module adapt Party to rcc.
+Contract discount module runs with the Tryton application platform.
+contract_discount module is based on sale_discount.
 
-# Support
-If you encounter any problems with this module, please don't hesitate to ask questions on the module bug tracker:
+Installing
+----------
 
-https://redmine.gcoop.coop
+See INSTALL
 
-For more information please contact the programmers at Gcoop
+Support
+-------
 
- - website: http://www.gcoop.coop
- - email: info@gcoop.coop
+If you encounter any problems with this module, please don't hesitate to ask
+questions on the NaN·tic bug tracker, mailing list,
+wiki or IRC channel:
 
-# License
+*  http://doc.tryton-erp.es/
+*  http://bitbucket.org/gcooplibre/contract_discount
+*  http://groups.tryton.org/
+*  http://wiki.tryton.org/
+*  irc://irc.freenode.net/tryton
+
+License
+-------
 
 See LICENSE
 
-# Copyright
+Copyright
+---------
 
 See COPYRIGHT
+
+For more information please visit the gcoop web site:
+
+  http://www.gcoop.coop/

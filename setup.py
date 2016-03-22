@@ -7,7 +7,7 @@ import os
 import ConfigParser
 
 MODULE = 'contract_discount'
-PREFIX = 'gcooplibre'
+PREFIX = 'trytonar'
 MODULE2PREFIX = {}
 
 
@@ -43,7 +43,7 @@ setup(name='%s_%s' % (PREFIX, MODULE),
     long_description=read('README'),
     author='lukio',
     url='http://www.gcoop.coop/',
-    download_url="https://bitbucket.org/gcooplibre/%s" % MODULE,
+    download_url="https://github.com/tryton-ar/%s" % MODULE,
     package_dir={'trytond.modules.%s' % MODULE: '.'},
     packages=[
         'trytond.modules.%s' % MODULE,

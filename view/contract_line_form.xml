@@ -8,9 +8,5 @@
             <field name="discount" factor="100" xexpand="0" xfill="0"/>
             <label name="discount" string="%" xalign="0.0" xexpand="1" xfill="1"/>
         </group>
-        <label name="contract_start_date"/>
-        <field name="contract_start_date"/>
-        <label name="contract_end_date"/>
-        <field name="contract_end_date"/>
     </xpath>
 </data>

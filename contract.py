@@ -5,7 +5,7 @@
 from trytond.model import fields
 from trytond.transaction import Transaction
 from trytond.pool import Pool, PoolMeta
-from trytond.pyson import Eval, If, Bool
+from trytond.pyson import Eval
 from trytond.modules.product import price_digits
 from trytond.config import config as config_
 from decimal import Decimal
@@ -78,23 +78,6 @@ class ContractLine:
         digits=(16, price_digits[1] + DISCOUNT_DIGITS), readonly=True)
     discount = fields.Numeric('Discount', digits=(16, DISCOUNT_DIGITS),
         depends=['type'])
-    contract_start_date = fields.Date('Contract Start Date',
-        states={
-            'required': Bool(Eval('discount')),
-            },
-        domain=[
-            If(Bool(Eval('contract_end_date')),
-                ('contract_start_date', '<=', Eval('contract_end_date', None)),
-                ()),
-            ],
-        depends=['contract_end_date', 'discount'])
-    contract_end_date = fields.Date('Contract End Date',
-        domain=[
-            If(Bool(Eval('contract_end_date')),
-                ('contract_end_date', '>=', Eval('contract_start_date', None)),
-                ()),
-            ],
-        depends=['contract_start_date'])
 
     @classmethod
     def __setup__(cls):
@@ -202,35 +185,19 @@ class ContractConsumption:
     def get_invoice_line(self):
         line = super(ContractConsumption, self).get_invoice_line()
         if line:
-            line.gross_unit_price = self.contract_line.gross_unit_price
-            discount = Decimal(0)
-            if self.contract_line.discount and self.contract and self.contract.contract_discount:
-                discount = (Decimal('1.0')
-                    - (Decimal('1.0') - self.contract_line.discount)
-                    * (Decimal('1.0') - self.contract.contract_discount))
-                discount = self.verify_contract_period(discount)
-                pass
-            elif self.contract and self.contract.contract_discount:
-                discount = self.contract.contract_discount
-            elif self.contract_line.discount:
-                discount = self.contract_line.discount
-                discount = self.verify_contract_period(discount)
+            discount = None
+            if self.contract_line.gross_unit_price != line.unit_price:
+                if self.contract_line.discount and self.contract and self.contract.contract_discount:
+                    discount = (Decimal('1.0')
+                        - (Decimal('1.0') - self.contract_line.discount)
+                        * (Decimal('1.0') - self.contract.contract_discount))
+                    pass
+                elif self.contract and self.contract.contract_discount:
+                    discount = self.contract.contract_discount
+                elif self.contract_line.discount:
+                    discount = self.contract_line.discount
 
-            line.discount = discount
+                if discount:
+                    bonificacion = (discount * 100).to_eng_string().replace('.', ',') + '%'
+                    line.description += u' BONIFICACIÓN %s' % bonificacion
             return line
-
-    def verify_contract_period(self, discount):
-        import datetime
-        if self.contract_line.contract_start_date:
-            start_period_date = self.contract.get_start_period_date(self.contract_line.contract_start_date)
-            if start_period_date < datetime.date.today():
-                if self.contract_line.contract_end_date:
-                    if self.contract_line.contract_end_date > datetime.date.today():
-                        return discount
-                    else:
-                        return Decimal(0)  # Do not apply discount
-                else:
-                    return discount
-            else:
-                return Decimal(0)  # Do not apply discount
-        return discount

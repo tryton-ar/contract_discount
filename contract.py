@@ -187,6 +187,8 @@ class ContractConsumption:
         if line:
             discount = None
             if self.contract_line.gross_unit_price != line.unit_price:
+                line.gross_unit_price = round(line.unit_price, 4)
+                line.discount = Decimal('0')
                 if self.contract_line.discount and self.contract and self.contract.contract_discount:
                     discount = (Decimal('1.0')
                         - (Decimal('1.0') - self.contract_line.discount)

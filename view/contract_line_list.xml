@@ -4,5 +4,6 @@
         <field name="discount" factor="100">
             <suffix string="%"/>
         </field>
+        <field name="description" tree_invisible="1"/>
     </xpath>
 </data>

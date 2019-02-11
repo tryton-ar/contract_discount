@@ -91,12 +91,14 @@ class ContractLine:
         contract_discount = Transaction().context.get('contract_discount')
 
         if contract_discount is None:
-            if hasattr(self, 'contract') and hasattr(self.contract, 'contract_discount'):
-                contract_discount = self.contract.contract_discount or Decimal(0)
+            if (hasattr(self, 'contract') and
+                    hasattr(self.contract, 'contract_discount')):
+                contract_discount = (self.contract.contract_discount or
+                    Decimal(0))
             else:
                 contract_discount = Decimal(0)
-        if self.gross_unit_price is not None and (self.discount is not None
-                or contract_discount is not None):
+        if self.gross_unit_price is not None and (self.discount is not None or
+                contract_discount is not None):
             unit_price = self.gross_unit_price
             if self.discount:
                 unit_price *= (1 - self.discount)
@@ -104,14 +106,15 @@ class ContractLine:
                 unit_price *= (1 - contract_discount)
 
             if self.discount and contract_discount:
-                discount = (self.discount + contract_discount
-                    - self.discount * contract_discount)
+                discount = (self.discount + contract_discount -
+                    self.discount * contract_discount)
                 if discount != 1:
                     gross_unit_price_wo_round = unit_price / (1 - discount)
             elif self.discount and self.discount != 1:
                 gross_unit_price_wo_round = unit_price / (1 - self.discount)
             elif contract_discount and contract_discount != 1:
-                gross_unit_price_wo_round = unit_price / (1 - contract_discount)
+                gross_unit_price_wo_round = \
+                    unit_price / (1 - contract_discount)
 
             digits = self.__class__.unit_price.digits[1]
             unit_price = unit_price.quantize(Decimal(str(10.0 ** -digits)))
@@ -160,14 +163,14 @@ class ContractLine:
             if 'gross_unit_price' not in vals:
                 gross_unit_price = vals['unit_price']
                 if vals.get('discount') not in (None, 1):
-                    gross_unit_price = (gross_unit_price
-                        / (1 - vals['discount']))
+                    gross_unit_price = (gross_unit_price /
+                        (1 - vals['discount']))
                 if vals.get('contract'):
                     contract = Contract(vals['contract'])
                     contract_discount = contract.contract_discount
                     if contract_discount not in (None, 1):
-                        gross_unit_price = (gross_unit_price
-                            / (1 - contract_discount))
+                        gross_unit_price = (gross_unit_price /
+                            (1 - contract_discount))
                 if gross_unit_price != vals['unit_price']:
                     digits = cls.gross_unit_price.digits[1]
                     gross_unit_price = gross_unit_price.quantize(
@@ -189,10 +192,11 @@ class ContractConsumption:
             if self.contract_line.gross_unit_price != line.unit_price:
                 line.gross_unit_price = round(line.unit_price, 4)
                 line.discount = Decimal('0')
-                if self.contract_line.discount and self.contract and self.contract.contract_discount:
-                    discount = (Decimal('1.0')
-                        - (Decimal('1.0') - self.contract_line.discount)
-                        * (Decimal('1.0') - self.contract.contract_discount))
+                if (self.contract_line.discount and self.contract and
+                        self.contract.contract_discount):
+                    discount = (Decimal('1.0') -
+                        (Decimal('1.0') - self.contract_line.discount) *
+                        (Decimal('1.0') - self.contract.contract_discount))
                     pass
                 elif self.contract and self.contract.contract_discount:
                     discount = self.contract.contract_discount
@@ -200,6 +204,7 @@ class ContractConsumption:
                     discount = self.contract_line.discount
 
                 if discount:
-                    bonificacion = (discount * 100).to_eng_string().replace('.', ',') + '%'
+                    bonificacion = (discount * 100).to_eng_string().replace(
+                        '.', ',') + '%'
                     line.description += u' BONIFICACIÓN %s' % bonificacion
             return line

@@ -206,5 +206,5 @@ class ContractConsumption:
                 if discount:
                     bonificacion = (discount * 100).to_eng_string().replace(
                         '.', ',') + '%'
-                    line.description += u' BONIFICACIÓN %s' % bonificacion
+                    line.description += ' BONIFICACIÓN %s' % bonificacion
             return line
